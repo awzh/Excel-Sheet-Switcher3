@@ -22,18 +22,20 @@ jobs:
       with:
         arch: ${{ matrix.arch }}
 
+    - name: Install Ninja
+      shell: powershell
+      run: choco install ninja -y --no-progress
+
     - name: Configure CMake
       shell: cmd
-      run: |
-        cmake -B build -G "Visual Studio 17 2022" -A ${{ matrix.arch }}
+      run: cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
 
     - name: Build
       shell: cmd
-      run: |
-        cmake --build build --config Release
+      run: cmake --build build
 
     - name: Upload EXE
       uses: actions/upload-artifact@v4
       with:
         name: SheetSwitcher-${{ matrix.arch }}
-        path: build/Release/ExcelSheetSwitcher.exe
+        path: build/ExcelSheetSwitcher.exe
